@@ -1,6 +1,6 @@
 module Rack
   module Session
-    module Php
+    class PHP
       VERSION = "0.0.1"
     end
   end

@@ -1,9 +1,9 @@
 require "rack/session/php/version"
+require "rack/session/abstract/id"
 
 module Rack
   module Session
-    module Php
-      # Your code goes here...
+    class PHP
     end
   end
 end
