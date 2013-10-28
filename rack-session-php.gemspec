@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Rack::Session::PHP::VERSION
   spec.authors       = ["Shinpei Maruyama"]
   spec.email         = ["shinpeim@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{rack middleware which provides php compatible sessions}
+  spec.summary       = %q{rack middleware which provides php competible sessions}
   spec.homepage      = ""
   spec.license       = "MIT"
 
