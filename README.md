@@ -1,4 +1,5 @@
 # Rack::Session::PHP
+[![Build Status](https://travis-ci.org/Shinpeim/rack-session-php.png?branch=master)](https://travis-ci.org/Shinpeim/rack-session-php)
 
 This module provides PHP compatible session in rack layer.
 
