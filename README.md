@@ -1,6 +1,6 @@
-# Rack::Session::Php
+# Rack::Session::PHP
 
-TODO: Write a gem description
+This module provides PHP compatible session in rack layer.
 
 ## Installation
 
@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -18,7 +18,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+In your config.ru
+
+```
+require 'rack/session/php'
+
+use Rack::Session::PHP, {
+  :session_file_dir => "/path/to/your/session_files"
+  :file_options => {
+    :internal_encoding => 'UTF-8', # encoding in ruby is utf-8
+    :external_encoding => 'EUC-JP',# encoding in session file is euc-jp
+    :encoding_option => {:undef => :replace}, # option passed to String#encode
+  }
+  :expire_after => 10,
+  # and you can pass Rack::Session options.
+}
+
+run your_awsome_rack_application
+```
 
 ## Contributing
 
