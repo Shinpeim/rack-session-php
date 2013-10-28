@@ -30,7 +30,16 @@ describe Rack::Session::PHP do
   end)
   incrementor = Rack::Lint.new(incrementor)
 
-  let(:pool) { Rack::Session::PHP.new(incrementor, :session_file_dir => Dir.tmpdir) }
+  let(:session_file_dir) {File.join(File.dirname(__FILE__), "..", "..", "session_files")}
+  let(:pool) {
+    Rack::Session::PHP.new(incrementor, :session_file_dir => session_file_dir)
+  }
+
+  after do
+    Dir.foreach(session_file_dir) do |file|
+      File.delete(File.join(session_file_dir, file)) if file =~ /^sess/
+    end
+  end
 
   it "creates a new cookie" do
     res = Rack::MockRequest.new(pool).get("/")
@@ -59,7 +68,7 @@ describe Rack::Session::PHP do
   end
 
   it "determines session from params" do
-    pool_with_params = Rack::Session::PHP.new(incrementor, :session_file_dir => Dir.tmpdir, :cookie_only => false)
+    pool_with_params = Rack::Session::PHP.new(incrementor, :session_file_dir => session_file_dir, :cookie_only => false)
     req = Rack::MockRequest.new(pool_with_params)
     res = req.get("/")
     sid = res["Set-Cookie"][session_match, 1]
@@ -72,15 +81,11 @@ describe Rack::Session::PHP do
   it "survives nonexistant cookies" do
     bad_session_id = "nekodaisuki"
     bad_cookie = "rack.session=#{bad_session_id}"
-    begin
-      res = Rack::MockRequest.new(pool).
-        get("/", "HTTP_COOKIE" => bad_cookie)
-      expect(res.body).to eq '{"counter"=>1}'
-      cookie = res["Set-Cookie"][session_match]
-      expect(cookie).not_to match(/#{bad_cookie}/)
-    ensure
-      File.delete(File.join(Dir.tmpdir, "sess_#{bad_session_id}"))
-    end
+    res = Rack::MockRequest.new(pool).
+      get("/", "HTTP_COOKIE" => bad_cookie)
+    expect(res.body).to eq '{"counter"=>1}'
+    cookie = res["Set-Cookie"][session_match]
+    expect(cookie).not_to match(/#{bad_cookie}/)
   end
 
   it "does not send the same session id if it did not change" do
@@ -172,5 +177,29 @@ describe Rack::Session::PHP do
     expect(res1.body).to eq '{"counter"=>2}'
     res2 = sreq.get("/", "HTTP_COOKIE" => res0["Set-Cookie"])
     expect(res2.body).to eq '{"counter"=>2}'
+  end
+
+  it "can handle multibyte strings" do
+    multibyte_app = lambda{|env|
+      env['rack.session']['key'] = 'テスト'
+      [200, {}, 'session stored']
+    }
+    pool = Rack::Session::PHP.new(multibyte_app, {
+      :session_file_dir => session_file_dir,
+      :file_options => {
+        :internal_encoding => "UTF-8",
+        :external_encoding => "EUC-JP",
+      }
+    })
+
+    req = Rack::MockRequest.new(pool)
+    res = req.get("/")
+    session_id = session_match.match(res["Set-Cookie"])[1]
+
+    file_name = File.join(session_file_dir, "sess_#{session_id}")
+
+    # read as byte sequence
+    byteseq = IO.read(file_name, File.size(file_name))
+    expect(byteseq.force_encoding('EUC-JP')).to eq('key|s:6:"テスト";'.encode('EUC-JP'))
   end
 end
