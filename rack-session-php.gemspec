@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Shinpei Maruyama"]
   spec.email         = ["shinpeim@gmail.com"]
   spec.description   = %q{rack middleware which provides php compatible sessions}
-  spec.summary       = %q{rack middleware which provides php competible sessions}
-  spec.homepage      = ""
+  spec.summary       = %q{rack middleware which provides php compatible sessions. multibyte string is supported.}
+  spec.homepage      = "https://github.com/Shinpeim/rack-session-php"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
