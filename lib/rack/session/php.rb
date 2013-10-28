@@ -1,4 +1,3 @@
-require "rack/session/php/version"
 require "rack/session/abstract/id"
 require "php_session"
 

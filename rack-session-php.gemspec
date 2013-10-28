@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rack/session/php/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "rack-session-php"
-  spec.version       = Rack::Session::PHP::VERSION
+  spec.version       = "0.0.1"
   spec.authors       = ["Shinpei Maruyama"]
   spec.email         = ["shinpeim@gmail.com"]
   spec.description   = %q{rack middleware which provides php compatible sessions}
