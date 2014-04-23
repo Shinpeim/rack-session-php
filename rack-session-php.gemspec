@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "rack-session-php"
-  spec.version       = "0.0.1"
+  spec.version       = "0.0.2"
   spec.authors       = ["Shinpei Maruyama"]
   spec.email         = ["shinpeim@gmail.com"]
   spec.description   = %q{rack middleware which provides php compatible sessions}
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "php_session", "~> 0.3.0"
+  spec.add_dependency "php_session", "0.3.1"
   spec.add_dependency "rack", "~> 1.5.2"
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
