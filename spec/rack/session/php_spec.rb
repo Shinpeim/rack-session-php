@@ -31,7 +31,7 @@ describe Rack::Session::PHP do
   end)
   incrementor = Rack::Lint.new(incrementor)
 
-  let(:session_file_dir) {File.join(File.dirname(__FILE__), "..", "..", "session_files")}
+  let(:session_file_dir) {File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "session_files"))}
   let(:pool) {
     Rack::Session::PHP.new(incrementor, :session_file_dir => session_file_dir)
   }
@@ -187,10 +187,9 @@ describe Rack::Session::PHP do
     }
     pool = Rack::Session::PHP.new(multibyte_app, {
       :session_file_dir => session_file_dir,
-      :file_options => {
-        :internal_encoding => "UTF-8",
-        :external_encoding => "EUC-JP",
-      }
+
+      :internal_encoding => "UTF-8",
+      :external_encoding => "EUC-JP",
     })
 
     req = Rack::MockRequest.new(pool)
