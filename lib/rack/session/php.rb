@@ -5,13 +5,7 @@ module Rack
   module Session
     class PHP < Rack::Session::Abstract::ID
       def initialize(app, options = {})
-        @session_file_dir = options.delete(:session_file_dir)
-        raise "session file dir must be defined" unless @session_file_dir
-
-        file_options = options.delete(:file_options)
-        file_options ||= {}
-
-        @session = PHPSession.new(@session_file_dir, file_options)
+        @session = PHPSession.new(options)
         @mutex = Mutex.new
 
         super(app, options)
@@ -20,7 +14,7 @@ module Rack
       def generate_sid
         loop do
           sid = super
-          break sid unless ::File.exists?(::File.join(@session_file_dir, "sess_#{sid}"))
+          break sid if ! @session.exists?(sid)
         end
       end
 
