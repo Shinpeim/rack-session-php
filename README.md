@@ -25,14 +25,14 @@ In your config.ru
 require 'rack/session/php'
 
 use Rack::Session::PHP, {
-  :session_file_dir => "/path/to/your/session_files"
-  :file_options => {
-    :internal_encoding => 'UTF-8', # encoding in ruby is utf-8
-    :external_encoding => 'EUC-JP',# encoding in session file is euc-jp
-    :encoding_option => {:undef => :replace}, # option passed to String#encode
-  }
-  :expire_after => 10,
+  # options are passed to php_session gem
+  :session_file_dir => "/path/to/your/session_files",
+  :internal_encoding => 'UTF-8',
+  :external_encoding => 'EUC-JP',
+  :encoding_option => {:undef => :replace},
+
   # and you can pass Rack::Session options.
+  :expire_after => 10,
 }
 
 run your_awsome_rack_application
